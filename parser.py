@@ -65,7 +65,7 @@ def parse() -> list:
 
         quote_name = clear_string(quote_name)[1:-1]
         quote_price_now = clear_string(quote_price_now)[3:]
-        quote_price_old = clear_string(quote_price_old)[1:-1]
+        quote_price_old = clear_string(quote_price_old)
         q_brand = clear_string(q_brand.text)[1:-1]
         q_made_in = clear_string(q_made_in.text)[1:-1]
         q_exp_d = clear_string(q_exp_d.text)[1:-1]
