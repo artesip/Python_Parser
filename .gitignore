@@ -1,1 +1,4 @@
 .idea/
+__pycache__/
+parser_db.db
+parser_db.db-journal

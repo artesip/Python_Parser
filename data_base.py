@@ -13,16 +13,19 @@ class DB:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             price_old REAL,
-            price_now REAL
+            price_now REAL,
+            brand TEXT,
+            made_in TEXT,
+            expiration_date TEXT,
+            weight REAL
         )''')
 
     def insert(self, adapter: Adapter):
         cursor = self.conn.cursor()
-        print(f'''INSERT INTO SPECIAL_OFFERS (name, price_old, price_now) VALUES 
-                        ('{adapter.name}', '{adapter.price_old}', '{adapter.price_now}')
-        ''')
-        cursor.execute(f'''INSERT INTO SPECIAL_OFFERS (name, price_old, price_now) VALUES 
-                        ('{adapter.name}', '{adapter.price_old}', '{adapter.price_now}')
+        cursor.execute(f'''INSERT INTO SPECIAL_OFFERS (name, price_old, price_now, brand, made_in, expiration_date,
+                                                                                                        weight) VALUES 
+                       ('{adapter.name}', '{adapter.price_old}', '{adapter.price_now}', '{adapter.brand}',
+                        '{adapter.made_in}', '{adapter.expiration_date}', '{adapter.weight}')
         ''')
 
     def get_special_offers_cursor(self) -> Cursor:
