@@ -1,22 +1,11 @@
 from time import sleep
-from bs4 import BeautifulSoup
 import re
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-
-class Adapter:
-    def __init__(self, name: str, price_now: str, price_old: str, brand: str, made_in: str, expiration_date: str,
-                 weight: str):
-        self.name = name
-        self.price_now = price_now
-        self.price_old = price_old
-        self.brand = brand
-        self.made_in = made_in
-        self.expiration_date = expiration_date
-        self.weight = weight
+from Adapter import Adapter
 
 
 def clear_string(s: str) -> str:
@@ -26,8 +15,22 @@ def clear_string(s: str) -> str:
         s = ''
         s = ''.join(temp)
         s = re.sub(" +", " ", s)
-    if s[:5] == " Дск ":
+
+    temp = ""
+    if s[:4] == "Дск ":
         s = s[4:]
+    elif s[:5] == "Бренд":
+        temp = s[5:]
+        s = s[:5] + ' ' + temp
+    elif s[:6] == "Страна":
+        temp = s[19:]
+        s = s[:19] + ' ' + temp
+    elif s[:3] == "Вес":
+        temp = s[3:]
+        s = s[:3] + ' ' + temp
+    elif s[:4] == "Срок":
+        temp = s[13:]
+        s = s[:13] + ' ' + temp
 
     return s
 
@@ -43,47 +46,57 @@ def parse() -> list:
         (By.CLASS_NAME, "btn-main.focus-btn.location-confirm__button.red")))
     driver.execute_script('arguments[0].click();', button_yes)
 
-    button = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
-        (By.CLASS_NAME, "product-card.item")))
+    try:
+        while True:
+            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "add-more-btn")))
+            button_load_more = driver.find_element(By.CLASS_NAME, "add-more-btn")
+            driver.execute_script('arguments[0].click();', button_load_more)
+    except:
+        print("I loaded all")
 
-    button = driver.find_elements(By.CLASS_NAME, "product-card.item")
+    product_card_buttons = driver.find_elements(By.CLASS_NAME, "product-card.item")
 
-    for elem in button:
+    for elem in product_card_buttons:
         driver.execute_script('arguments[0].click();', elem)
-        sleep(0.3)
-        html = driver.execute_script("return document.body.innerHTML")
 
-        bsObj = BeautifulSoup(html, 'html.parser')
-        found_quote = bsObj.find('div', {'class': 'sidebar-main'})
+        try:
+            element = WebDriverWait(driver, 20).until(
+                EC.presence_of_all_elements_located((By.CLASS_NAME, "item-name-cont"))
+            )
+            sleep(0.1)
+        except:
+            print("All elements found")
 
-        quote_name = found_quote.find('div', {'class': 'item-name-cont'}).text
-        quote_price_now = found_quote.find('div', {'class': 'price-regular'}).text
-        quote_price_old = found_quote.find('span', {'class': 'price-discount-val'}).text
-        quote_characteristic = found_quote.find_all('li', {'class', 'item-characteristic'})
+        quote_name_2 = driver.find_element(By.CLASS_NAME, "item-name-cont").text
 
-        q_brand, q_made_in, q_exp_d, q_weight = quote_characteristic
+        quote_prices = driver.find_element(By.CLASS_NAME, "item-prices")
+        quote_price_now_2 = quote_prices.find_element(By.CLASS_NAME, "price-regular").text
+        quote_price_old_2 = quote_prices.find_element(By.CLASS_NAME, "price-discount-val").text
 
-        quote_name = clear_string(quote_name)[1:-1]
-        quote_price_now = clear_string(quote_price_now)[3:]
-        quote_price_old = clear_string(quote_price_old)
-        q_brand = clear_string(q_brand.text)[1:-1]
-        q_made_in = clear_string(q_made_in.text)[1:-1]
-        q_exp_d = clear_string(q_exp_d.text)[1:-1]
-        q_weight = clear_string(q_weight.text)[1:-1]
+        quote_characteristic_2 = driver.find_elements(By.CLASS_NAME, "item-characteristic")
 
-        quote_price_now = quote_price_now[:-2] + "." + quote_price_now[-2:]
-        quote_price_old = quote_price_old[:-2] + "." + quote_price_old[-2:]
+        temp = quote_price_now_2[-2:]
+        quote_price_now_2 = quote_price_now_2[:-2] + "." + temp
+        temp = quote_price_old_2[-2:]
+        quote_price_old_2 = quote_price_old_2[:-2] + "." + temp
 
-        all_quotes.append(Adapter(
-            quote_name,
-            quote_price_old,
-            quote_price_now,
-            q_brand,
-            q_made_in,
-            q_exp_d,
-            q_weight
-        ))
+        q_brand_2, q_made_in_2, q_exp_d_2, q_weight_2 = quote_characteristic_2
+        quote_name_2 = clear_string(quote_name_2)
+        quote_price_now_2 = clear_string(quote_price_now_2)
+        quote_price_old_2 = clear_string(quote_price_old_2)
+        q_brand_2 = clear_string(q_brand_2.text)
+        q_made_in_2 = clear_string(q_made_in_2.text)
+        q_exp_d_2 = clear_string(q_exp_d_2.text)
+        q_weight_2 = clear_string(q_weight_2.text)
 
+        all_quotes.append((Adapter(
+            quote_name_2,
+            quote_price_now_2[3:],
+            quote_price_old_2,
+            q_brand_2,
+            q_made_in_2,
+            q_exp_d_2,
+            q_weight_2
+        )))
     driver.close()
-
     return all_quotes

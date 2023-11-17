@@ -9,7 +9,6 @@ def parce_and_add_to_bd(local_db:DB):
 
 if __name__ == '__main__':
 
-    try:
         db = DB()
         while(True):
 
@@ -27,5 +26,3 @@ if __name__ == '__main__':
             else:
                 break
 
-    except:
-        print("Something went wrong!")
