@@ -1,6 +1,7 @@
-from parser import parse
-from data_base import DB
-
+from python_parse import parser
+from python_parse import data_base as DB
+from pymongo import MongoClient
+from pprint import pprint
 
 def parce_and_add_to_bd(local_db:DB):
     for elem in parse():
@@ -8,7 +9,7 @@ def parce_and_add_to_bd(local_db:DB):
 
 
 if __name__ == '__main__':
-
+        '''
         db = DB()
         while(True):
 
@@ -25,4 +26,10 @@ if __name__ == '__main__':
                 print()
             else:
                 break
+        '''
+        Mongo_URL = "mongodb://mongo:27017"
+        client = MongoClient(Mongo_URL)
+        db = client.admin
+        db.list = db.command("listDatabases")
 
+        print("doker-compose working")
