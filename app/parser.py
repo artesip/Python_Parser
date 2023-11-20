@@ -1,11 +1,10 @@
-from time import sleep
 import re
+from time import sleep
+from Adapter import Adapter
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
- 
-from python_parse import Adapter
 
 
 def clear_string(s: str) -> str:
@@ -20,22 +19,18 @@ def clear_string(s: str) -> str:
     if s[:4] == "Дск ":
         s = s[4:]
     elif s[:5] == "Бренд":
-        temp = s[5:]
-        s = s[:5] + ' ' + temp
+        s = s[5:]
     elif s[:6] == "Страна":
-        temp = s[19:]
-        s = s[:19] + ' ' + temp
+        s = s[19:]
     elif s[:3] == "Вес":
-        temp = s[3:]
-        s = s[:3] + ' ' + temp
+        s = s[3:]
     elif s[:4] == "Срок":
-        temp = s[13:]
-        s = s[:13] + ' ' + temp
+        s = s[13:]
 
     return s
 
 
-def parse() -> list:
+async def parse() -> list:
     all_quotes = []
 
     driver = webdriver.Chrome()
@@ -53,7 +48,7 @@ def parse() -> list:
             driver.execute_script('arguments[0].click();', button_load_more)
     except:
         print("I loaded all")
-
+    sleep(3)
     product_card_buttons = driver.find_elements(By.CLASS_NAME, "product-card.item")
 
     for elem in product_card_buttons:
@@ -67,36 +62,37 @@ def parse() -> list:
         except:
             print("All elements found")
 
-        quote_name_2 = driver.find_element(By.CLASS_NAME, "item-name-cont").text
+        quote_name = driver.find_element(By.CLASS_NAME, "item-name-cont").text
 
         quote_prices = driver.find_element(By.CLASS_NAME, "item-prices")
-        quote_price_now_2 = quote_prices.find_element(By.CLASS_NAME, "price-regular").text
-        quote_price_old_2 = quote_prices.find_element(By.CLASS_NAME, "price-discount-val").text
+        quote_price_now = quote_prices.find_element(By.CLASS_NAME, "price-regular").text
+        quote_price_old = quote_prices.find_element(By.CLASS_NAME, "price-discount-val").text
 
-        quote_characteristic_2 = driver.find_elements(By.CLASS_NAME, "item-characteristic")
+        quote_characteristic = driver.find_elements(By.CLASS_NAME, "item-characteristic")
 
-        temp = quote_price_now_2[-2:]
-        quote_price_now_2 = quote_price_now_2[:-2] + "." + temp
-        temp = quote_price_old_2[-2:]
-        quote_price_old_2 = quote_price_old_2[:-2] + "." + temp
+        temp = quote_price_now[-2:]
+        quote_price_now = quote_price_now[:-2] + "." + temp
+        temp = quote_price_old[-2:]
+        quote_price_old = quote_price_old[:-2] + "." + temp
 
-        q_brand_2, q_made_in_2, q_exp_d_2, q_weight_2 = quote_characteristic_2
-        quote_name_2 = clear_string(quote_name_2)
-        quote_price_now_2 = clear_string(quote_price_now_2)
-        quote_price_old_2 = clear_string(quote_price_old_2)
-        q_brand_2 = clear_string(q_brand_2.text)
-        q_made_in_2 = clear_string(q_made_in_2.text)
-        q_exp_d_2 = clear_string(q_exp_d_2.text)
-        q_weight_2 = clear_string(q_weight_2.text)
-
-        all_quotes.append((Adapter(
-            quote_name_2,
-            quote_price_now_2[3:],
-            quote_price_old_2,
-            q_brand_2,
-            q_made_in_2,
-            q_exp_d_2,
-            q_weight_2
-        )))
+        q_brand, q_made_in, q_exp_d, q_weight = quote_characteristic
+        quote_name = clear_string(quote_name)
+        quote_price_now = clear_string(quote_price_now)
+        quote_price_old = clear_string(quote_price_old)
+        q_brand = clear_string(q_brand.text)
+        q_made_in = clear_string(q_made_in.text)
+        q_exp_d = clear_string(q_exp_d.text)
+        q_weight = clear_string(q_weight.text)
+        if (quote_prices != '' and quote_price_now != '' and quote_price_old != '' and q_brand != '' and q_made_in != ''
+                and q_exp_d != '' and q_weight != '' and quote_name != ''):
+            all_quotes.append((Adapter(
+                quote_name,
+                quote_price_now[3:],
+                quote_price_old,
+                q_brand,
+                q_made_in,
+                q_exp_d,
+                q_weight
+            )))
     driver.close()
     return all_quotes

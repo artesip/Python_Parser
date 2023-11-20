@@ -1,6 +1,6 @@
 import sqlite3
 from sqlite3 import Cursor
-from python_parse import Adapter
+from Adapter import Adapter
 
 
 class DB:
@@ -26,7 +26,7 @@ class DB:
             (name, price_now, price_old, brand, made_in, expiration_date, weight) 
             VALUES (?, ?, ?, ?, ?, ?, ?)
         ''', (
-            adapter.name, adapter.price_now, adapter.price_old,  adapter.brand, adapter.made_in, adapter.expiration_date,
+            adapter.name, adapter.price_now, adapter.price_old, adapter.brand, adapter.made_in, adapter.expiration_date,
             adapter.weight))
         self.conn.commit()
 
@@ -37,3 +37,21 @@ class DB:
 
     def __del__(self):
         self.conn.close()
+
+    def deleting_all_parsed(self):
+        cur = self.conn.cursor()
+        cur.execute('''DELETE FROM SPECIAL_OFFERS''')
+        self.conn.commit()
+
+    def get_all_brands(self) -> list:
+        cur = self.conn.cursor()
+        cur.execute('''SELECT brand FROM SPECIAL_OFFERS''')
+        result = set()
+        for elem in cur.fetchall():
+            result.add(str(elem))
+        return list(result)
+
+    def get_data_by_filter_brand(self, brand_filter: str) -> Cursor:
+        cur = self.conn.cursor()
+        cur.execute('''SELECT * FROM SPECIAL_OFFERS where brand = ? ''', (brand_filter,))
+        return cur
