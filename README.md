@@ -12,10 +12,10 @@ Docker and Linux thats all
 
 # Build
 
-'''shell script
+``` shell script
 
 git clone https://github.com/artesip/Python_Parser
 
 bash ./build
 
-'''
+```
