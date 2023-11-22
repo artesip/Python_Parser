@@ -1,6 +1,6 @@
 # Description 
 
-This code is parcing this site() and giving you intarface in Telegram 
+This code is parcing this site(https://5ka.ru/special_offers) and giving you intarface in Telegram 
 
 # Build
 
