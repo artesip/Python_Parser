@@ -1,3 +1,4 @@
+import os
 import re
 from time import sleep
 from Adapter import Adapter
@@ -32,8 +33,11 @@ def clear_string(s: str) -> str:
 
 async def parse() -> list:
     all_quotes = []
+    
+    options = webdriver.FirefoxOptions()
+    options.add_argument('--headless')
 
-    driver = webdriver.Chrome()
+    driver = webdriver.Firefox(options=options)
     driver.get('https://5ka.ru/special_offers')
     driver.implicitly_wait(10)
 
