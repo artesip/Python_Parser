@@ -10,7 +10,7 @@ async def parce_site() -> str:
             db.insert(elem)
     except Exception as e:
         print(e)
-        return Something went wrong
+        return "Something went wrong"
     return "Сайт успешно спарсен! "
 
 

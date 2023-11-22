@@ -3,5 +3,9 @@ version: '3'
 services:
   app:
     build: ./app
-  mongo:
-    image: mongo:4.4.6
+    networks:
+      - bridge
+
+networks:
+  bridge:
+    driver: bridge
