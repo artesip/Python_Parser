@@ -2,5 +2,4 @@
 __pycache__/
 parser_db.db
 parser_db.db-journal
-Config.py
 myenv

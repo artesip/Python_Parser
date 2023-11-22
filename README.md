@@ -14,7 +14,12 @@ Docker and Linux thats all
 
 ``` shell script
 
-git clone https://github.com/artesip/Python_Parser
+git clone git@github.com:artesip/Python_Parser.git
+
+cd Python_Parser 
+
+# Временно
+git checkout dev 
 
 bash ./build
 
