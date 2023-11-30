@@ -39,13 +39,13 @@ def parse():
     driver.get('https://5ka.ru/special_offers')
     driver.implicitly_wait(60)
     
-    button_yes = WebDriverWait(driver, 30).until(EC.visibility_of_element_located(
+    button_yes = WebDriverWait(driver, 15).until(EC.visibility_of_element_located(
         (By.CLASS_NAME, "btn-main.focus-btn.location-confirm__button.red")))
     driver.execute_script('arguments[0].click();', button_yes)
 
     try:
         while True:
-            element = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "add-more-btn")))
+            element = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.CLASS_NAME, "add-more-btn")))
             button_load_more = driver.find_element(By.CLASS_NAME, "add-more-btn")
             driver.execute_script('arguments[0].click();', button_load_more)
     except:
@@ -56,10 +56,10 @@ def parse():
         driver.execute_script('arguments[0].click();', elem)
 
         try:
-            element = WebDriverWait(driver, 30).until(
+            element = WebDriverWait(driver, 15).until(
                 EC.presence_of_all_elements_located((By.CLASS_NAME, "item-name-cont"))
             )
-            sleep(0.3)
+            sleep(0.1)
         except:
             print("All elements found")
 
