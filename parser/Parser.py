@@ -30,39 +30,36 @@ def clear_string(s: str) -> str:
 
     return s
 
-
-async def parse() -> list:
+def parse():
     all_quotes = []
-    
     options = webdriver.FirefoxOptions()
     options.add_argument('--headless')
 
     driver = webdriver.Firefox(options=options)
     driver.get('https://5ka.ru/special_offers')
-    driver.implicitly_wait(10)
-
-    button_yes = WebDriverWait(driver, 10).until(EC.visibility_of_element_located(
+    driver.implicitly_wait(60)
+    
+    button_yes = WebDriverWait(driver, 30).until(EC.visibility_of_element_located(
         (By.CLASS_NAME, "btn-main.focus-btn.location-confirm__button.red")))
     driver.execute_script('arguments[0].click();', button_yes)
 
     try:
         while True:
-            element = WebDriverWait(driver, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "add-more-btn")))
+            element = WebDriverWait(driver, 20).until(EC.presence_of_element_located((By.CLASS_NAME, "add-more-btn")))
             button_load_more = driver.find_element(By.CLASS_NAME, "add-more-btn")
             driver.execute_script('arguments[0].click();', button_load_more)
     except:
         print("I loaded all")
     sleep(3)
     product_card_buttons = driver.find_elements(By.CLASS_NAME, "product-card.item")
-
     for elem in product_card_buttons:
         driver.execute_script('arguments[0].click();', elem)
 
         try:
-            element = WebDriverWait(driver, 20).until(
+            element = WebDriverWait(driver, 30).until(
                 EC.presence_of_all_elements_located((By.CLASS_NAME, "item-name-cont"))
             )
-            sleep(0.1)
+            sleep(0.3)
         except:
             print("All elements found")
 
