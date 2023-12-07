@@ -1,1 +1,2 @@
-Token = '6825610448:AAHn31D6wtrIV7yIrkbVkQk2yb1rQx0RtcA'
+TOKEN = '6825610448:AAHn31D6wtrIV7yIrkbVkQk2yb1rQx0RtcA'
+PARSE_SERVICE = 'parse_service'

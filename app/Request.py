@@ -1,4 +1,5 @@
 import requests
+from Config import PARSE_SERVICE
 from flask import Flask
 from Data_base import DB
 
@@ -9,7 +10,7 @@ async def parce_site() -> str:
     db.deleting_all_parsed()
     response = ''
     try:
-        response = requests.get('http://python_parser_parser_1:5001/pong', timeout = 600)
+        response = requests.get(f'http://{PARSE_SERVICE}:5001/pong', timeout = 600)
     except requests.exceptions.RequestException as e:
         s = '\n Cannot reach the parse service.'
         print(s)

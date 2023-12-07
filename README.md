@@ -1,6 +1,6 @@
 # Description 
 
-This code is parcing this site(https://5ka.ru/special_offers) and giving you intarface in Telegram 
+This code is parcing this site(https://market-delivery.yandex.ru/retail/paterocka/catalog/44008?placeSlug=pyaterochka_iogvf) and giving you intarface in Telegram 
 
 # Build
 

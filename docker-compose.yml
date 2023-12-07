@@ -2,6 +2,7 @@ version: '3'
 
 services:
   db:
+    container_name: db_service
     image: postgres:latest
     user: postgres
     environment:
@@ -16,6 +17,7 @@ services:
       - mynet
 
   app:
+    container_name: app_service
     build: ./app
     depends_on:
       - db
@@ -23,6 +25,7 @@ services:
       - mynet
 
   parser:
+    container_name: parse_service
     build: ./parser
     depends_on:
       - db
