@@ -38,7 +38,6 @@ def choose_region(driver: webdriver, s: str):
 
 
 def parce_elements(driver: webdriver, product_card: list, quotes: list):
-    j = 0
     for elem in product_card:
         driver.execute_script('arguments[0].click();', elem)
 
@@ -84,15 +83,14 @@ def parce_elements(driver: webdriver, product_card: list, quotes: list):
                                                      "DesktopUIButton_root.ModalCross_button.DesktopUIButton_simple"
                                                      ".DesktopUIButton_sm")
         driver.execute_script('arguments[0].click();', close_button)
-        print(j)
-        j += 1
+
 
 
 def parse():
     all_quotes = []
     site_path = 'https://market-delivery.yandex.ru/retail/paterocka/catalog/44008?placeSlug=pyaterochka_iogvf'
     options = webdriver.FirefoxOptions()
-    # options.add_argument('--headless')
+    options.add_argument('--headless')
 
     driver = webdriver.Firefox(options=options)
     driver.get(site_path)

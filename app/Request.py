@@ -6,7 +6,7 @@ db = DB()
 
 
 async def parce_site() -> str:
-
+    db.deleting_all_parsed()
     response = ''
     try:
         response = requests.get('http://python_parser_parser_1:5001/pong', timeout = 600)
@@ -16,15 +16,6 @@ async def parce_site() -> str:
         return s
 
     return "Сайт успешно спарсен! " + response.text
-    '''
-    try:
-        for elem in await parse():
-            db.insert(elem)
-    except Exception as e:
-        print(e)
-        return "Something went wrong"
-    return "Сайт успешно спарсен! "
-'''
 
 async def deleting_all_parsed() -> str:
     try:
