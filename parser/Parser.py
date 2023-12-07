@@ -1,99 +1,112 @@
-import os
-import re
-from time import sleep
+import time
 from Adapter import Adapter
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 
-def clear_string(s: str) -> str:
-    elems = ['\n', '\t']
-    for elem in elems:
-        temp = s.split(elem)
-        s = ''
-        s = ''.join(temp)
-        s = re.sub(" +", " ", s)
+def get_string_by_class_name(driver: webdriver, s: str):
+    return WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, s))).text
 
-    temp = ""
-    if s[:4] == "Дск ":
-        s = s[4:]
-    elif s[:5] == "Бренд":
-        s = s[5:]
-    elif s[:6] == "Страна":
-        s = s[19:]
-    elif s[:3] == "Вес":
-        s = s[3:]
-    elif s[:4] == "Срок":
-        s = s[13:]
 
-    return s
+def get_web_element_by_class_name(driver: webdriver, s: str):
+    return WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, s)))
+
+
+def get_web_elements_by_class_name(driver: webdriver, s: str):
+    return WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located((By.CLASS_NAME, s)))
+
+
+def choose_region(driver: webdriver, s: str):
+    choose_button = get_web_element_by_class_name(driver, "UiKitButton_root.UiKitButton_size-l.UiKitButton_variant"
+                                                          "-action.UiKitButton_shape-default.UiKitButton_width-full")
+    driver.execute_script('arguments[0].click();', choose_button)
+
+    input_field = get_web_element_by_class_name(driver, "AppAddressInput_addressInput.AppAddressInput_modalStyle")
+    input_field.send_keys(s)
+    input_field.send_keys(Keys.RETURN)
+    time.sleep(10)
+    accept_button = get_web_element_by_class_name(driver, "UiKitButton_root.UiKitButton_size-m.UiKitButton_variant"
+                                                          "-action.UiKitButton_shape-default.DesktopLocationModal_ok")
+
+    driver.execute_script('arguments[0].click();', accept_button)
+
+
+def parce_elements(driver: webdriver, product_card: list, quotes: list):
+    j = 0
+    for elem in product_card:
+        driver.execute_script('arguments[0].click();', elem)
+
+        quote_name = get_string_by_class_name(driver, "UiKitText_root.UiKitText_Title3.UiKitText_Extrabold"
+                                                      ".UiKitText_Text")
+        quote_price_now = get_string_by_class_name(driver, "UiKitCorePrice_price.UiKitCorePrice_xl"
+                                                           ".UiKitCorePrice_bold.UiKitCorePrice_theme-market-delivery"
+                                                           ".UiKitCorePrice_newPrice.UiKitCorePrice_theme-market"
+                                                           "-delivery")
+
+        quote_price_old = get_string_by_class_name(driver, "UiKitCorePrice_price.UiKitCorePrice_m"
+                                                           ".UiKitCorePrice_medium.UiKitCorePrice_theme-market"
+                                                           "-delivery.UiKitCorePrice_oldPrice")
+        time.sleep(0.1)
+
+        q_weight = get_string_by_class_name(driver, "UiKitProductFullCard_weight")
+        quote_characteristic_title = driver.find_elements(By.CLASS_NAME,
+                                                          "UiKitProductCardDescriptions_descriptionTitle")
+        quote_characteristic_text = driver.find_elements(By.CLASS_NAME, "UiKitProductCardDescriptions_descriptionText")
+
+        q_exp_d = q_brand = q_made_in = ''
+
+        for i in range(len(quote_characteristic_title)):  # можно переписать легче щас лень
+            if q_exp_d != '' and q_brand != '' and q_made_in != '':
+                break
+            if quote_characteristic_title[i].text == "Срок годности":
+                q_exp_d = quote_characteristic_text[i].text
+            elif quote_characteristic_title[i].text == "Страна":
+                q_made_in = quote_characteristic_text[i].text
+            elif quote_characteristic_title[i].text == "Бренд":
+                q_brand = quote_characteristic_text[i].text
+
+        quotes.append((Adapter(
+            quote_name,
+            quote_price_now,
+            quote_price_old,
+            q_brand,
+            q_made_in,
+            q_exp_d,
+            q_weight
+        )))
+        close_button = get_web_element_by_class_name(driver,
+                                                     "DesktopUIButton_root.ModalCross_button.DesktopUIButton_simple"
+                                                     ".DesktopUIButton_sm")
+        driver.execute_script('arguments[0].click();', close_button)
+        print(j)
+        j += 1
+
 
 def parse():
     all_quotes = []
+    site_path = 'https://market-delivery.yandex.ru/retail/paterocka/catalog/44008?placeSlug=pyaterochka_iogvf'
     options = webdriver.FirefoxOptions()
-    options.add_argument('--headless')
+    # options.add_argument('--headless')
 
     driver = webdriver.Firefox(options=options)
-    driver.get('https://5ka.ru/special_offers')
-    driver.implicitly_wait(60)
-    
-    button_yes = WebDriverWait(driver, 15).until(EC.visibility_of_element_located(
-        (By.CLASS_NAME, "btn-main.focus-btn.location-confirm__button.red")))
-    driver.execute_script('arguments[0].click();', button_yes)
+    driver.get(site_path)
 
-    try:
-        while True:
-            element = WebDriverWait(driver, 15).until(EC.presence_of_element_located((By.CLASS_NAME, "add-more-btn")))
-            button_load_more = driver.find_element(By.CLASS_NAME, "add-more-btn")
-            driver.execute_script('arguments[0].click();', button_load_more)
-    except:
-        print("I loaded all")
-    sleep(3)
-    product_card_buttons = driver.find_elements(By.CLASS_NAME, "product-card.item")
-    for elem in product_card_buttons:
-        driver.execute_script('arguments[0].click();', elem)
+    address = "Пермь, улица Попова, 16А"
 
-        try:
-            element = WebDriverWait(driver, 15).until(
-                EC.presence_of_all_elements_located((By.CLASS_NAME, "item-name-cont"))
-            )
-            sleep(0.1)
-        except:
-            print("All elements found")
+    choose_region(driver, address)
+    time.sleep(10)
+    product_card_buttons = driver.find_elements(By.CLASS_NAME, "UiKitDesktopProductCard_root"
+                                                               ".UiKitDesktopProductCard_main"
+                                                               ".UiKitDesktopProductCard_m"
+                                                               ".UiKitDesktopProductCard_fluidWidth"
+                                                               ".UiKitDesktopProductCard_clickable")
+    parce_elements(driver, product_card_buttons, all_quotes)
 
-        quote_name = driver.find_element(By.CLASS_NAME, "item-name-cont").text
-
-        quote_prices = driver.find_element(By.CLASS_NAME, "item-prices")
-        quote_price_now = quote_prices.find_element(By.CLASS_NAME, "price-regular").text
-        quote_price_old = quote_prices.find_element(By.CLASS_NAME, "price-discount-val").text
-
-        quote_characteristic = driver.find_elements(By.CLASS_NAME, "item-characteristic")
-
-        temp = quote_price_now[-2:]
-        quote_price_now = quote_price_now[:-2] + "." + temp
-        temp = quote_price_old[-2:]
-        quote_price_old = quote_price_old[:-2] + "." + temp
-
-        q_brand, q_made_in, q_exp_d, q_weight = quote_characteristic
-        quote_name = clear_string(quote_name)
-        quote_price_now = clear_string(quote_price_now)
-        quote_price_old = clear_string(quote_price_old)
-        q_brand = clear_string(q_brand.text)
-        q_made_in = clear_string(q_made_in.text)
-        q_exp_d = clear_string(q_exp_d.text)
-        q_weight = clear_string(q_weight.text)
-        if (quote_prices != '' and quote_price_now != '' and quote_price_old != '' and q_brand != '' and q_made_in != ''
-                and q_exp_d != '' and q_weight != '' and quote_name != ''):
-            all_quotes.append((Adapter(
-                quote_name,
-                quote_price_now[3:],
-                quote_price_old,
-                q_brand,
-                q_made_in,
-                q_exp_d,
-                q_weight
-            )))
     driver.close()
     return all_quotes
