@@ -19,6 +19,8 @@ services:
   app:
     container_name: app_service
     build: ./app
+    environment:
+      WAIT_HOST: postgres:5432
     depends_on:
       - db
     networks:
@@ -27,6 +29,8 @@ services:
   parser:
     container_name: parse_service
     build: ./parser
+    environment:
+      WAIT_HOST: postgres:5432
     depends_on:
       - db
     ports:

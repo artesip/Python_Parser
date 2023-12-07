@@ -1,7 +1,7 @@
 import time
 import socket
 import Keyboards
-from Config import Token
+from Config import TOKEN
 from aiogram.filters import CommandStart
 from aiogram import F, Router, Dispatcher, Bot, html
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
@@ -22,7 +22,7 @@ while True:
 router = Router()
 dp = Dispatcher()
 dp.include_router(router)
-bot = Bot(Token)
+bot = Bot(TOKEN)
 
 brand_dict = dict()
 
