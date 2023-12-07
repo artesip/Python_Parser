@@ -107,4 +107,4 @@ def parse():
     parce_elements(driver, product_card_buttons, all_quotes)
 
     driver.close()
-    return all_quotes
+    return list(set(all_quotes))

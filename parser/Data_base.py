@@ -1,10 +1,11 @@
 import psycopg2
 from Adapter import Adapter
+from Config import HOST, DATABASE, USER, PASSWORD
 
 
 class DB:
     def __init__(self):
-        self.conn = psycopg2.connect(host="db", database="postgres", user="postgres", password="root")
+        self.conn = psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
 
     def insert(self, adapter: Adapter):
         cursor = self.conn.cursor()
