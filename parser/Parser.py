@@ -38,7 +38,10 @@ def choose_region(driver: webdriver, s: str):
 
 
 def parce_elements(driver: webdriver, product_card: list, quotes: list):
+    i = 0
     for elem in product_card:
+        if i == 7: 
+            break
         driver.execute_script('arguments[0].click();', elem)
 
         quote_name = get_string_by_class_name(driver, "UiKitText_root.UiKitText_Title3.UiKitText_Extrabold"
@@ -82,7 +85,6 @@ def parce_elements(driver: webdriver, product_card: list, quotes: list):
         close_button = get_web_element_by_class_name(driver,
                                                      "DesktopUIButton_root.ModalCross_button.DesktopUIButton_simple"
                                                      ".DesktopUIButton_sm")
-        break
         driver.execute_script('arguments[0].click();', close_button)
 
 

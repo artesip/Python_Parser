@@ -11,7 +11,7 @@ async def parce_site() -> str:
     db.deleting_all_parsed_x5()
     response = ''
     try:
-        response = requests.get(f'http://{PARSE_SERVICE}:5001/pong', timeout=600)
+        response = requests.get(f'http://{PARSE_SERVICE}:5001/pong', timeout=1200)
     except requests.exceptions.RequestException as e:
         s = '\n Cannot reach the parse service.'
         print(s)

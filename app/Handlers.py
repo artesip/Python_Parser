@@ -40,13 +40,13 @@ async def menu(message: Message):
 
 @dp.callback_query(lambda c: c.data.startswith('x5_brand_page_'))
 async def show_brand_page(callback: CallbackQuery):
-    page_number = int(callback.data.split('_')[2])
+    page_number = int(callback.data.split('_')[3])
     await show_brands(callback.from_user.id, page_number, BRAND_X5)
 
 
 @dp.callback_query(lambda c: c.data.startswith('magnit_brand_page_'))
 async def show_brand_page(callback: CallbackQuery):
-    page_number = int(callback.data.split('_')[2])
+    page_number = int(callback.data.split('_')[3])
     await show_brands(callback.from_user.id, page_number, BRAND_MAGNIT)
 
 
