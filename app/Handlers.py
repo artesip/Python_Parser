@@ -24,7 +24,7 @@ async def bot_start(message: Message):
 
 @router.message(F.text == Keyboards.PARSE_OFFERS)
 async def site_parse(message: Message):
-    await message.answer("Парсинг начался, примерное время 7 мин")
+    await message.answer("Парсинг начался, примерное время 12 мин")
     await message.answer(await parce_site())
 
 
