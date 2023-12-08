@@ -85,15 +85,14 @@ def parce_elements(driver: webdriver, product_card: list, quotes: list):
         driver.execute_script('arguments[0].click();', close_button)
 
 
-
-def parse():
+def parse(site_path: str):  # requires site path from market-delivery
     all_quotes = []
-    site_path = 'https://market-delivery.yandex.ru/retail/paterocka/catalog/44008?placeSlug=pyaterochka_iogvf'
+    site_path_func = site_path
     options = webdriver.FirefoxOptions()
     options.add_argument('--headless')
 
     driver = webdriver.Firefox(options=options)
-    driver.get(site_path)
+    driver.get(site_path_func)
 
     address = "Пермь, улица Попова, 16А"
 

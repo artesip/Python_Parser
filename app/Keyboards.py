@@ -4,7 +4,8 @@ MENU = 'Меню'
 PARSE_OFFERS = 'Спарсить с сайта скидки'
 DELETE_OFFERS = 'Удалить все'
 CHOOSE_SMTH_BELOW = 'Выберите пункт ниже: '
-SEARCH_BY_NAME = 'Поиск по Бренду'
+SEARCH_BY_BRAND_X5 = 'Поиск по Бренду в Пятерочке'
+SEARCH_BY_BRAND_MAGNIT = 'Поиск по Бренду в Пятерочке'
 
 main_keyboard = ReplyKeyboardMarkup(keyboard=[
 
@@ -16,5 +17,6 @@ main_keyboard = ReplyKeyboardMarkup(keyboard=[
 
 menu_keyboard = InlineKeyboardMarkup(inline_keyboard=[
 
-    [InlineKeyboardButton(text=SEARCH_BY_NAME, callback_data='search_brand')],
+    [InlineKeyboardButton(text=SEARCH_BY_BRAND_X5, callback_data='search_brand_x5')],
+    [InlineKeyboardButton(text=SEARCH_BY_BRAND_MAGNIT, callback_data='search_brand_magnit')]
 ])
