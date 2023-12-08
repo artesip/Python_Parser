@@ -82,6 +82,7 @@ def parce_elements(driver: webdriver, product_card: list, quotes: list):
         close_button = get_web_element_by_class_name(driver,
                                                      "DesktopUIButton_root.ModalCross_button.DesktopUIButton_simple"
                                                      ".DesktopUIButton_sm")
+        break
         driver.execute_script('arguments[0].click();', close_button)
 
 

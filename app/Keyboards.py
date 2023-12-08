@@ -5,7 +5,7 @@ PARSE_OFFERS = 'Спарсить с сайта скидки'
 DELETE_OFFERS = 'Удалить все'
 CHOOSE_SMTH_BELOW = 'Выберите пункт ниже: '
 SEARCH_BY_BRAND_X5 = 'Поиск по Бренду в Пятерочке'
-SEARCH_BY_BRAND_MAGNIT = 'Поиск по Бренду в Пятерочке'
+SEARCH_BY_BRAND_MAGNIT = 'Поиск по Бренду в Магните'
 
 main_keyboard = ReplyKeyboardMarkup(keyboard=[
 
