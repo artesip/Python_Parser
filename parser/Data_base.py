@@ -1,3 +1,5 @@
+import time
+import socket
 import psycopg2
 from Adapter import Adapter
 from Config import HOST, DATABASE, USER, PASSWORD
@@ -5,6 +7,15 @@ from Config import HOST, DATABASE, USER, PASSWORD
 
 class DB:
     def __init__(self):
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        while True:
+            try:
+                s.connect(('db', 5432))
+                s.close
+                break
+            except socket.error as e:
+                time.sleep(0.1) 
         self.conn = psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
 
     def insert(self, adapter: Adapter):

@@ -1,5 +1,3 @@
-import time
-import socket
 import Keyboards
 from Config import TOKEN
 from aiogram.filters import CommandStart
@@ -7,17 +5,6 @@ from aiogram import F, Router, Dispatcher, Bot, html
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from Request import parce_site, deleting_all_parsed, get_all_brands, get_items_by_filter_brand
 
-
-
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-
-while True:
-    try:
-        s.connect(('db', 5432))
-        s.close
-        break
-    except socket.error as e:
-        time.sleep(0.1) 
 
 router = Router()
 dp = Dispatcher()
