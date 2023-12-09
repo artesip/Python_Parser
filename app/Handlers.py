@@ -27,8 +27,11 @@ async def bot_start(message: Message):
 
 @router.message(F.text == Keyboards.PARSE_OFFERS)
 async def site_parse(message: Message):
-    await message.answer("Парсинг начался, примерное время 12 мин")
-    await message.answer(await parce_site())
+    for elem in db.get_user_id_cursor().fetchall():
+        await message.answer("Парсинг начался, примерное время 12 мин")
+    answ = await parce_site()
+    for elem in db.get_user_id_cursor().fetchall():
+        await message.answer(answ)
 
 async def site_parse_with_announcement():
     for elem in db.get_user_id_cursor().fetchall():

@@ -9,15 +9,17 @@ class DB:
 
     def insert_into_id(self, id):
         try:
-        cursor = self.conn.cursor()
-        cursor.execute('''
-            INSERT INTO users_id
-            (user_id) 
-            VALUES (%s)
-        ''', [id])
-        self.conn.commit()
+            cursor = self.conn.cursor()
+            cursor.execute('''
+                INSERT INTO users_id
+                (user_id) 
+                VALUES (%s)
+            ''', [id])
+            self.conn.commit()
         except Exception as e:
             print(e)
+        finally:
+            self.conn.commit()
 
     def insert_into_x5(self, adapter: Adapter):
         cursor = self.conn.cursor()

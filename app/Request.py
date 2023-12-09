@@ -21,7 +21,8 @@ async def parce_site() -> str:
         s = '\n Cannot reach the parse service.'
         print(s)
         return s
-
+    if response.text != "Отлично":
+        return "Произошла ошибка попробуйте еще раз"
     return "Сайт успешно спарсен! " + response.text
 
 

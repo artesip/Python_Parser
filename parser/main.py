@@ -24,11 +24,7 @@ def do_parse():
     with concurrent.futures.ThreadPoolExecutor() as executor:
         magnit_future = executor.submit(do_parse_help, MAGNIT_SITE_PATH, db.insert_into_magnit)
         x5_future = executor.submit(do_parse_help, X5_SITE_PATH, db.insert_into_x5)
-        cursor = db.get_special_offers_magnit_cursor()
-        if len(cursor.fetchall()) == 0:
-            magnit_future = executor.submit(do_parse_help, MAGNIT_SITE_PATH, db.insert_into_magnit)
-        if len(cursor.fetchall()) == 0:
-            x5_future = executor.submit(do_parse_help, X5_SITE_PATH, db.insert_into_x5)
+
         if magnit_future.result() == magnit_future.result() == "Отлично":
             return "Отлично"
 
