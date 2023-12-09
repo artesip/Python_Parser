@@ -65,11 +65,14 @@ async def menu(callback: CallbackQuery):
     data = {
         "name": "<N/A>",
         "new_price": "<N/A>",
-        "old_price": "<N/A>"
+        "old_price": "<N/A>",
+        "weight": "<N/A>",
+        "made_in": "<N/A>"
     }
     brand_str = brand_dict.get(int(callback.data.split('_')[1]))
     site = callback.data.split('_')[2]
 
+    cursor_items = None
     if site == BRAND_X5:
         cursor_items = await get_x5_items_by_filter_brand(brand_str)
     elif site == BRAND_MAGNIT:
@@ -79,10 +82,15 @@ async def menu(callback: CallbackQuery):
         data['name'] = elem[1]
         data['new_price'] = elem[2]
         data['old_price'] = elem[3]
+        data['weight'] = elem[7]
+        data['made_in'] = elem[5]
         await bot.send_message(callback.from_user.id, "Вот что я нашёл:\n" +
                                f"Имя товара: {html.quote(data['name'])}\n"
                                f"Цена со скидкой: {html.quote(data['new_price'])}\n"
-                               f"Цена без скидки: {html.quote(data['old_price'])}")
+                               f"Цена без скидки: {html.quote(data['old_price'])}"
+                               f"Вес товара: {html.quote(data['weight'])}\n"
+                               f"Страна изготовления: {html.quote(data['made_in'])}"
+                               )
 
 
 async def show_brands(user_id, page_number, site_brands: str):
