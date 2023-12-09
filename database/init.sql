@@ -21,3 +21,8 @@ create table offers_magnit
     expiration_date TEXT,
     weight_pr TEXT
 );
+
+create table users_id(
+    db_id SERIAL, 
+    user_id TEXT PRIMARY KEY
+);

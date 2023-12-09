@@ -1,10 +1,15 @@
+from Adapter import Adapter
 import requests
-from Config import PARSE_SERVICE
+from collections import defaultdict
 from flask import Flask
 from Data_base import DB
+from Config import PARSE_SERVICE
+
 
 db = DB()
 
+async def instert_id(user_id):
+    db.insert_into_id(user_id)
 
 async def parce_site() -> str:
     db.deleting_all_parsed_magnit()
@@ -61,3 +66,18 @@ async def get_magnit_items_by_filter_brand(brand: str):
     except Exception as e:
         print(e)
         return "Something went wrong"
+
+async def get_2store_dicts():
+    dict_magnit = defaultdict(list)
+    dict_x5 = defaultdict(list)
+
+    cursor = db.get_special_offers_x5_cursor()
+
+    for elem in cursor.fetchall():
+        dict_x5[elem[4]].append(Adapter(elem[1], elem[2], elem[3], elem[4], elem[5], elem[6], elem[7]))
+
+    cursor = db.get_special_offers_magnit_cursor()
+    for elem in cursor.fetchall():
+        dict_magnit[elem[4]].append(Adapter(elem[1], elem[2], elem[3], elem[4], elem[5], elem[6], elem[7]))
+    
+    return (dict_x5, dict_magnit)

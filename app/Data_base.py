@@ -7,6 +7,18 @@ class DB:
     def __init__(self):
         self.conn = psycopg2.connect(host=HOST, database=DATABASE, user=USER, password=PASSWORD)
 
+    def insert_into_id(self, id):
+        try:
+        cursor = self.conn.cursor()
+        cursor.execute('''
+            INSERT INTO users_id
+            (user_id) 
+            VALUES (%s)
+        ''', [id])
+        self.conn.commit()
+        except Exception as e:
+            print(e)
+
     def insert_into_x5(self, adapter: Adapter):
         cursor = self.conn.cursor()
         cursor.execute('''
@@ -28,6 +40,14 @@ class DB:
             adapter.name, adapter.price_now, adapter.price_old, adapter.brand, adapter.made_in, adapter.expiration_date,
             adapter.weight))
         self.conn.commit()
+
+
+    def get_user_id_cursor(self):
+        cursor = self.conn.cursor()
+        cursor.execute("SELECT * FROM users_id")
+        self.conn.commit()
+        return cursor
+
 
     def get_special_offers_x5_cursor(self):
         cursor = self.conn.cursor()

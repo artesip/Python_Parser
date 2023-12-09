@@ -70,6 +70,9 @@ def parce_elements(driver: webdriver, product_card: list, quotes: list):
             elif quote_characteristic_title[i].text == "Бренд":
                 q_brand = quote_characteristic_text[i].text
 
+        if q_brand == '':
+            q_brand = 'Без бренда'
+
         quotes.append((Adapter(
             quote_name,
             quote_price_now,
