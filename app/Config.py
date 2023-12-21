@@ -1,0 +1,6 @@
+HOST = 'db'
+DATABASE = 'postgres'
+USER = 'postgres'
+PASSWORD = 'root'
+TOKEN = ''
+PARSE_SERVICE = 'parse_service'

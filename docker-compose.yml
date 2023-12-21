@@ -1,0 +1,45 @@
+version: '3'
+
+services:
+  db:
+    container_name: db_service
+    image: postgres:latest
+    user: postgres
+    environment:
+      POSTGRES_DB: "postgres"
+      POSTGRES_PASSWORD: "root"
+      PGDATA: "/var/lib/postgresql/data/pgdata"
+    volumes:
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "5432:5432"
+    networks:
+      - mynet
+
+  app:
+    container_name: app_service
+    build: ./app
+    environment:
+      WAIT_HOST: postgres:5432
+    depends_on:
+      - db
+    networks:
+      - mynet
+
+  parser:
+    container_name: parse_service
+    build: ./parser
+    environment:
+      WAIT_HOST: postgres:5432
+    depends_on:
+      - db
+    ports:
+      - "5000:5000"
+    networks:
+      - mynet
+      
+volumes:
+  postgres-data:
+    driver: local
+networks:
+  mynet:

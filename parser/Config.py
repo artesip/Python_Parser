@@ -1,0 +1,6 @@
+HOST = 'db'
+DATABASE = 'postgres'
+USER = 'postgres'
+PASSWORD = 'root'
+X5_SITE_PATH = 'https://market-delivery.yandex.ru/retail/paterocka/catalog/44008?placeSlug=pyaterochka_iogvf'
+MAGNIT_SITE_PATH = 'https://market-delivery.yandex.ru/retail/magnit_celevaya/catalog/44008?placeSlug=magnit_celevaya_hz7k5'

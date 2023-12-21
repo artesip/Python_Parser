@@ -1,0 +1,5 @@
+#!/bin/bash
+
+chmod +x ./build
+
+docker-compose up --build
