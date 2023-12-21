@@ -18,9 +18,6 @@ git clone git@github.com:artesip/Python_Parser.git
 
 cd Python_Parser 
 
-# Временно
-git checkout dev_v2 
-
 bash ./build
 
 ```
